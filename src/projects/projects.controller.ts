@@ -24,7 +24,7 @@ export class ProjectsController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.client.send({ cmd: 'find_one_project' }, { id });
+    return this.client.send({ cmd: 'find_one_project' },  id );
   }
 
   @Get('owner/:ownerId')
