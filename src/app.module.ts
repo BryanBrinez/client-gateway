@@ -5,10 +5,11 @@ import { NatsModule } from './transports/nats.module';
 import { AuthModule } from './auth/auth.module';
 import { MembersModule } from './members/members.module';
 import { TaskModule } from './task/task.module';
+import { ChatModule } from './chat/chat.module';
 
 
 @Module({
-  imports: [UsersModule, ProjectsModule, NatsModule, AuthModule, MembersModule, TaskModule],
+  imports: [UsersModule, ProjectsModule, NatsModule, AuthModule, MembersModule, TaskModule, ChatModule],
   controllers: [],
   providers: [],
 })
