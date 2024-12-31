@@ -2,8 +2,9 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Inject, Query } from
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { NATS_SERVICE } from 'src/config/services';
-import { ClientProxy } from '@nestjs/microservices';
+import { ClientProxy, RpcException } from '@nestjs/microservices';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
+import { firstValueFrom } from 'rxjs';
 
 @Controller('task')
 export class TaskController {
@@ -27,9 +28,24 @@ export class TaskController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTaskDto: UpdateTaskDto) {
-    return this.client.send({ cmd: 'update_task' }, id);
+  async update(@Param('id') id: string, @Body() updateTaskDto: UpdateTaskDto) {
+
+    try {
+      const taskUpdated = await firstValueFrom(this.client.send({ cmd: 'update_task' }, {
+        id,
+        ...updateTaskDto
+      }))
+      return taskUpdated
+
+    } catch (error) {
+      throw new RpcException(error)
+    }
+
   }
+
+
+
+
 
   @Delete(':id')
   remove(@Param('id') id: string) {
@@ -38,6 +54,6 @@ export class TaskController {
 
   @Get('project/:projectId')
   findByOwnerId(@Param('projectId') projectId: string) {
-    return this.client.send({ cmd: 'find_by_project_id' },  projectId );
+    return this.client.send({ cmd: 'find_by_project_id' }, projectId);
   }
 }
