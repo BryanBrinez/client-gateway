@@ -11,16 +11,35 @@ export class MembersController {
     @Inject(NATS_SERVICE) private readonly client: ClientProxy,
   ) { }
 
-   @Post()
-   create(@Body() createMemberDto: CreateMemberDto) {
+  @Post()
+  create(@Body() createMemberDto: CreateMemberDto) {
     return this.client.send({ cmd: 'create_member' }, createMemberDto);
-   }
+  }
 
 
-    @Get()
-    findAll(@Query() paginationDto: PaginationDto) {
-      return this.client.send({ cmd: 'find_all_members' }, paginationDto);
-    }
+  @Get()
+  findAll(@Query() paginationDto: PaginationDto) {
+    return this.client.send({ cmd: 'find_all_members' }, paginationDto);
+  }
+
+
+
+  @Get('project/:projectId')
+  findByOwnerId(@Param('projectId') projectId: string) {
+    return this.client.send({ cmd: 'find_by_projec_id' }, projectId);
+  }
+
+
+  @Get('user/:userId')
+  findByUserId(@Param('userId') userId: string) {
+    return this.client.send({ cmd: 'find_by_user_id' }, userId);
+  }
+
+
+  @Get('user/project/:projectId')
+  findUsersNotInProject(@Param('projectId') projectId: string) {
+    return this.client.send({ cmd: 'find_users_not_in_project' }, projectId);
+  }
   // @Get(':id')
   // findOne(@Param('id') id: string) {
   //   return this.client.findOne(+id);

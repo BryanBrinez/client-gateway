@@ -35,4 +35,9 @@ export class TaskController {
   remove(@Param('id') id: string) {
     return this.client.send({ cmd: 'remove_task' }, id);
   }
+
+  @Get('project/:projectId')
+  findByOwnerId(@Param('projectId') projectId: string) {
+    return this.client.send({ cmd: 'find_by_project_id' },  projectId );
+  }
 }
